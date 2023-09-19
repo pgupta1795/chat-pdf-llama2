@@ -1,0 +1,209 @@
+IMPORTANT MQL QUERIES
+
+***************************************************************************
+		
+modify person 't1' assign role 'TT Color Administrator';
+add person Sanga assign role 'R1' assign role 'R2';
+
+***************************************************************************
+print connection id;
+
+***************************************************************************
+
+mod connection id owner t1;
+
+***************************************************************************
+
+mod connection id 'id' value ; 
+
+TO MODIFY VALUE OF ATTRIBUTE etc.
+
+modify bus id 'TT attribute' value;
+
+***************************************************************************
+
+connect bus id relationship 'rel_name' to id; TO CONNECT TWO OBJECT
+
+***************************************************************************
+
+print program emxTriggerManagerBase select Code;
+ 
+*****************************************************************************
+For count -
+//Get the count of objects for a particular type 
+* eval expr 'count TRUE' on temp query bus PCN * *;  
+
+eval expr '�ount TRUE' on temp query bus tnr where current==Release;
+
+****************************************************************************
+
+MQL Commands --
+
+In mql run the following script (after replacing the SP number with the created part in your environment
+
+* add bus Drawing SP100039490 A.1 vault "eService Production" policy VPLM_SMB_Definition project "Common Space" organization Stadler
+* connect bus VPMReference SP100039490 A.1 rel VPMRepInstance to Drawing SP100039490 A.1
+* add bus "TT Drawing PDF Holder" SP100039490 A.1 vault "eService Production" policy "TT Drawing PDF Holder" project "Common Space" organization Stadler
+* connect bus Drawing SP100039490 A.1 rel "TT Drawing PDF" to "TT Drawing PDF Holder" SP100039490 A.1
+* mod bus Drawing SP100039490 A.1 current FROZEN
+* mod bus VPMReference SP100039490 A.1 current FROZEN
+
+
+******************************************************************************************************************
+To run trigger/ job from MQL 
+execute program�TIFTrigger�-method newJob�1.2.3.4�tvc:jobcfg/NAME_OF_CONFIG.xml; - give objId & config
+
+approve businessobject OBJECTID signature SIGN_NAME [comment VALUE];
+ignore businessobject OBJECTID signature SIGN_NAME [comment VALUE];
+reject businessobject OBJECTID signature SIGN_NAME [comment VALUE];
+unsign businessobject OBJECTID signature SIGN_NAME|all [comment VALUE];
+enable businessobject OBJECTID [state STATE_NAME];
+disable businessobject OBJECTID [state STATE_NAME];
+override businessobject OBJECTID [state STATE_NAME];
+promote businessobject OBJECTID;
+demote businessobject OBJECTID;
+
+******************************************************************************************************************
+
+Exalead Search 
+
+1.start searchindex mode FULL/PARTIAL ; - agr full likhoge to aapke database mein jitne object hai sbki indexing hoggi
+or agr partial to jittne objects mein modification hua hai aapke last indexing k baad srf unki indexing hoggi
+
+2.status�searchindex�; 
+isse cmd se pta chlega ki kb last indexing hui thi
+
+3.�update�searchindex�TYPE 'DOCUMENTS� ; 
+kissi particular type k objects ki indexing krni hai to ye cmd
+
+�count�searchindex�; 
+ iss se pta chlega ki kitne objects indexed ho rkhe hai
+ 
+ exec prog emxTriggerBasedIndexingUtilBase  -method  index "19120.60485.23608.30404� 
+
+*******************************************************************************************************************
+
+Business object
+//Get the count of objects for a particular type 
+* eval expr 'count TRUE' on temp query bus PCN * *;  
+* temp query bus tnr selct id; - API- FINDOBJECT
+* print bus id select name revision state current attribute.value; - API - GETINFO
+* 
+* delete bus id;
+* promote bus id;
+* mod bus id current Release;
+* add bus t n r policy vault project "Common Space" Organization Stadler;
+
+// Policy , Type
+* add policy policyname;
+* add type typename;
+* modify policy P1  add type T1;
+
+// ATTRIBUTE
+* add attribute "ATTRNAME" type Part description "";
+* modify attribute "ATTRNAME" add range 20 30 default 10;
+
+//Queries relating to Registry  
+//To register  
+* modify program eServiceSchemaVariableMapping.tcl property attribute_Site to attribute "Site";
+* modify program eServiceSchemaVairableMapping.tcl property attribute_ActionType to attribute "Action Type";
+    
+//To Remove Registry Name  
+modify program eServiceSchemaVariableMapping.tcl remove property type_SKETCH to type "Sketch";    
+
+* To retrieve actual attribute name  - list property system name attribute_Quantity;
+* To retieve symbolic name /To retrieve registered property name from Actual attribute name: - list property system name attribute Quantity;
+
+//Command
+* modify command ENCAPP add user "ALL";
+
+//Menu 
+* modify menu ""remove command "";
+* modify menu ""  add command "";
+
+//Table 
+* mod table "" system column modify name "SANGA" add setting "";
+
+//Role
+* add role R1;
+* print role R1;
+
+//Compiling a program thru MQL  
+mod program emxPart file "/data/webdata/build_dir/Spinners_temp/Business/SourceFiles/emxPart";
+compile program emxPart force;
+
+************************************************************************************************************
+Rel-2-Rel
+
+* expand bus Part "First Child" 1 select relationship id; - API- GETRELATEDOBJECTS
+* add connection "EBOM Substitute" fromrel 24755.58495.53566.62720 to Part "SubstituteThruEBOM" 1;
+
+
+* print bus Part SubstituteThruEBOM 1 select to.fromrel;
+
+* print connection 24755.58495.53566.62720 select from.name;
+
+ //Checkin / Checkout
+* checkin bus "CAD Drawing" A-0000241 0 OR id append "D:\CAD Adapters\1\CADConversion\acad2000.dwg";  
+* checkout bus "CAD Drawing" A-0000241 0 or id file "filename";
+//MQL Prompt 
+* prompt 2;
+* prompt MQL<%d>
+
+***************************************************************************************************************
+
+//File that has been Check in
+
+* temp query bus "Design Document"  * * where ' "format.file" MATCH "*.JT" ';
+
+******************************************************************************************************************
+
+temp query bus staStadler_Part * * limit 10 select id;
+list type staStadler_Part select derived;
+list type staStadler_Part select derivative;
+print/list type staStadler_Part select *;
+print context;
+connect bus 26888.13147.26596.36230 rel 'EBOM' to '26888.13147.15252.59701';
+print bus 26888.13147.26596.36230 selectable;
+temp query owner reirol limit 10;
+temp query vault "eService Production" limit 10;
+list attribute Quantity;
+list attribute *Quantity*;
+
+---------------------EXPAND ---------------------------------------------
+expand bus 26888.13147.34740.60193;
+expand bus 26888.13147.34740.60193 select bus id dump |; == expand bus 26888.13147.34740.60193 recurse to 1 select bus id dump |;
+expand bus 26888.13147.34740.60193 from;
+expand bus 26888.13147.34740.60193 recurse to 2 limit 10 select bus id dump |;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' from recurse to 2 select bus id;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' from recurse to end select bus id;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' from recurse to rel select bus id select rel id dump |;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' type 'staStadler_Part,VPMReference' from recurse to rel limit 4 select bus id select rel id dump|;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' from recurse to rel select bus id  where "type.kindof[Part]" dump |;
+expand bus 26888.13147.34740.60193 rel 'Change Action,Change Affected Item' from recurse to rel select bus id  where "type==staStadler_Part" dump |;
+
+----------------------------EVAL EXPR---------------------------------------------------------------
+eval expr '"Owner : "+owner+"State : "+current' on bus 26888.13147.17448.51826;
+eval expr 'dateperiod dmy modified' on bus 26888.13147.17448.51826;
+eval expr 'COUNT TRUE' on temp query bus 'TT Order Requirement' * *;
+
+---------------------------------------------------------------------------------------------------
+add attribute 'DEMO_ATTRIBUTE' type String default 'ATT';
+add type 'DEMO_T' abstract true description 'TYPE FOR DEMO' derived staStadler_Part;
+add bus staStadler_Part DEMO_PART A policy 'EC Part' vault 'eService Production';
+
+
+-----------------------------------------------------------------------------------------------------
+temp query bus staStadler_Part SP* * limit 10 !expandtype;
+temp query bus staStadler_Part SP* * orderby name limit 10;
+temp query bus staStadler_Part SP* * where 'name ~~ sp00000000*' select name;
+temp query bus staStadler_Part SP* * where 'name ~= sp00000000*' select name;
+
+
+mod bus PROJECT_ID add ownership for 'Multiple Ownership For Object' as read,modify,all;
+
+mod person admin_platform property MBOMTable value 'WIP-Plant';
+
+
+
+exec program com.matrixone.apps.domain.util.ImmutableUtil -method emxSetImmutable unlock 'Program' 'emxTriggerManagerBase';
